@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ZSK.Models.AnimalRate>
+
+@{
+    ViewData["Title"] = "Aktuelle Kurse";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-gradient"> Aktuelle Tierkurse</h1>
+        <p class="text-muted">Hier siehst du die aktuellen Werte deiner Social-Media-Tiere.</p>
+    </div>
+
+    <div class="text-end mb-3">
+        <a asp-action="Create" class="btn btn-success px-4">+ Neues Tier</a>
+    </div>
+
+    <div class="table-responsive bg-white rounded shadow-sm p-3">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.EuroValue)</th>
+                    <th class="text-center">Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.EuroValue.ToString("C")</td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm mx-1">Bearbeiten</a>
+                            
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm mx-1">Löschen</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

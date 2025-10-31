@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "ZSK-Rechner Startseite";
+}
+
+<div class="container text-center mt-5">
+    <img src="~/images/Logo.png"
+         alt="ZSK Rechner"
+         class="img-fluid mb-4 rounded shadow-sm"
+         style="max-height:240px;" />
+
+    <h1 class="fw-bold mb-3 text-gradient">Willkommen beim ZSK-Rechner</h1>
+
+    <p class="text-muted mb-5">
+        Berechne den Wert deiner Social-Media-Tiere oder sieh dir aktuelle Kurse an.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a asp-controller="AnimalRates" asp-action="Index"
+           class="btn btn-primary px-4 py-2 shadow-sm">
+             Aktuelle Kurse
+        </a>
+        <a asp-controller="Converter" asp-action="Index"
+           class="btn btn-success px-4 py-2 shadow-sm">
+             Zum Umrechner
+        </a>
+    </div>
+</div>
+

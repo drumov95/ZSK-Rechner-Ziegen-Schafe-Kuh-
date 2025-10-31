@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ZSK.Models.Conversion>
+@using ZSK.Models
+
+@{
+    ViewData["Title"] = "Umrechnungen";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-gradient"> Vergangene Umrechnungen</h1>
+        <p class="text-muted">Hier findest du alle gespeicherten Umrechnungen.</p>
+    </div>
+
+    <div class="text-end mb-3">
+        <a asp-controller="Converter" asp-action="Index" class="btn btn-success px-4">+ Neue Umrechnung</a>
+    </div>
+
+    <div class="table-responsive bg-white rounded shadow-sm p-3">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.AnimalRate)</th>
+                    <th>@Html.DisplayNameFor(model => model.Direction)</th>
+                    <th>@Html.DisplayNameFor(model => model.EuroAmount)</th>
+                    <th>@Html.DisplayNameFor(model => model.Quantity)</th>
+                    <th>@Html.DisplayNameFor(model => model.UnitEuroAtCreation)</th>
+                    <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                    <th class="text-center">Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.AnimalRate?.Name</td>
+                        <td>
+                            @if (item.Direction == ConversionDirection.EuroToAnimals)
+                            {
+                                <span class="badge bg-primary">Euro → Tier</span>
+                            }
+                            else if (item.Direction == ConversionDirection.AnimalsToEuro)
+                            {
+                                <span class="badge bg-success">Tier → Euro</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">?</span>
+                            }
+                        </td>
+                        <td>@item.EuroAmount.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.UnitEuroAtCreation.ToString("C")</td>
+                        <td>@item.CreatedAt.ToString("g")</td>
+                        <td class="text-center">
+                           
+                           
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm mx-1">Löschen</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

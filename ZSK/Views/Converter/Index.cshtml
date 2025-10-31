@@ -1,0 +1,165 @@
+﻿@model List<ZSK.Models.AnimalRate>
+@{
+    ViewData["Title"] = "ZSK-Rechner";
+}
+
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-gradient"> ZSK-Rechner</h1>
+        <p class="text-muted">Direkt umrechnen, automatisch verteilen oder mehrere Tierarten addieren.</p>
+    </div>
+
+    <div class="bg-white rounded shadow-sm p-4 mb-4">
+        <h2 class="h5 mb-3">Direkte Umrechnung</h2>
+        <form asp-action="EuroToAnimals" method="post" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Euro</label>
+                <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    <input type="number" step="0.01" name="euro" min="0" required class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Tier</label>
+                <select name="animalRateId" class="form-select">
+                    @foreach (var a in Model)
+                    {
+                        <option value="@a.Id">@a.Name (@a.EuroValue.ToString("C"))</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary px-4">Umrechnen</button>
+            </div>
+
+            @if ((string)ViewBag.Mode == "EuroToAnimals")
+            {
+                <div class="col-12">
+                    <div class="alert alert-success mb-0">
+                        Mit <strong>@ViewBag.Euro</strong> € bekommst du:
+                        <div class="mt-1 fw-semibold">@ViewBag.Quantity × @ViewBag.Animal</div>
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+
+    <div class="bg-white rounded shadow-sm p-4 mb-4">
+        <h2 class="h5 mb-3">Automatische Verteilung</h2>
+        <form asp-action="Wechselgeld" method="post" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Euro-Betrag</label>
+                <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    <input type="number" step="0.01" name="euro" min="0" required class="form-control" />
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success px-4">Berechnen</button>
+            </div>
+
+            @if ((string)ViewBag.Mode == "Wechselgeld")
+            {
+                var res = ViewBag.Results as List<(string Name, int Count, decimal Value)>;
+                <div class="col-12">
+                    <div class="alert alert-info mb-3">
+                        Verteilung für <strong>@ViewBag.Euro</strong> €
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Anzahl</th>
+                                    <th>Wert/Tier</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in res)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@r.Name</td>
+                                        <td>@r.Count</td>
+                                        <td>@r.Value.ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if ((decimal)ViewBag.Rest > 0)
+                    {
+                        <div class="alert alert-warning mt-2">
+                            Rest: <strong>@((decimal)ViewBag.Rest) Euro</strong>
+                        </div>
+                    }
+                </div>
+            }
+        </form>
+    </div>
+
+    <div class="bg-white rounded shadow-sm p-4">
+        <h2 class="h5 mb-3">Tiere → Euro (mehrere Arten)</h2>
+        <form asp-action="AnimalsToEuro" method="post">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tier</th>
+                            <th>Wert</th>
+                            <th style="width:160px">Anzahl</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@Model[i].Name</td>
+                                <td>@Model[i].EuroValue.ToString("C")</td>
+                                <td>
+                                    <input type="hidden" name="animalIds" value="@Model[i].Id" />
+                                    <input type="number" name="quantities" min="0" value="0" class="form-control" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-outline-primary px-4">Gesamtwert berechnen</button>
+
+            @if ((string)ViewBag.Mode == "AnimalsToEuroMulti")
+            {
+                var rows = ViewBag.Rows as List<(string Name, int Count, decimal Unit, decimal Sum)>;
+                <div class="mt-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Anzahl</th>
+                                    <th>Wert/Tier</th>
+                                    <th>Summe</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in rows)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@r.Name</td>
+                                        <td>@r.Count</td>
+                                        <td>@r.Unit.ToString("C")</td>
+                                        <td class="fw-semibold">@r.Sum.ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-success fs-6">
+                        Gesamt: <strong>@((decimal)ViewBag.Total) Euro</strong>
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+</div>

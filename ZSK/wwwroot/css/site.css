@@ -1,0 +1,36 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.flex-fill {
+    flex: 1 0 auto;
+}
+
+
+footer.footer {
+    position: static !important;
+    bottom: auto;
+    z-index: auto;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #007bff, #00c851);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.btn {
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
