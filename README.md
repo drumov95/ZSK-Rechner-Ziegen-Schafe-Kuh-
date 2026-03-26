@@ -40,3 +40,17 @@ Das Projekt wurde im Rahmen eines Softwareentwicklungsprojekts entwickelt und ko
 **Beziehung:**  
 Eine *AnimalRate* kann mehrere *Conversions* haben → **1:n-Beziehung**  
 (Beim Löschen einer Tierart bleiben alte Umrechnungen erhalten dank `DeleteBehavior.Restrict`)
+
+##  Screenshots
+
+### Startseite
+
+![Startseite](Screenshot%20-%20Startseite.PNG)
+
+### ZSK Rechner
+
+![Rechner](Screenshot%20-%20ZSK%20Rechner.PNG)
+
+### Archiv
+
+![Archiv](Screenshot%20-%20Archiv.PNG)
